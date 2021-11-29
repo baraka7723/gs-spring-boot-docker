@@ -11,14 +11,17 @@ pipeline {
 	}
 
 	stages {
-		stage("build"){
+		stage("checkout"){
+		checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/baraka7723/gs-spring-boot-docker']]])
+		}
+		stage("build image"){
 		sh 'docker build -t baraka7723/test:1.0.0 .'
 		}
 		
 		stage("test: baseline (jdk8)") {
 			agent {
 				docker {
-					image 'adoptopenjdk/openjdk8:latest'
+					image 'baraka7723/test:1.0.0'
 					args '-v $HOME/.m2:/tmp/jenkins-home/.m2'
 				}
 			}
