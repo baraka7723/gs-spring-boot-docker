@@ -11,6 +11,10 @@ pipeline {
 	}
 
 	stages {
+		stage("build"){
+		sh 'docker build -t baraka7723/test:1.0.0 .'
+		}
+		
 		stage("test: baseline (jdk8)") {
 			agent {
 				docker {
@@ -23,8 +27,11 @@ pipeline {
 				sh 'test/run.sh'
 			}
 		}
-
+		stage ("deploy"){
+		                sh 'docker run -d  --rm -p 8081:8080 --name my-app baraka7723/test:1.0.0'
+		}
 	}
+	
 
 	post {
 		changed {
