@@ -1,5 +1,5 @@
 pipeline {
-	agent none
+	agent any
 
 	triggers {
 		pollSCM 'H/10 * * * *'
@@ -12,7 +12,9 @@ pipeline {
 
 	stages {
 		stage("checkout"){
+			steps{
 		checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/baraka7723/gs-spring-boot-docker']]])
+		}
 		}
 		stage("build image"){
 		sh 'docker build -t baraka7723/test:1.0.0 .'
